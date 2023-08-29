@@ -27,6 +27,11 @@ target_include_directories(${LIBRARY_NAME}
 		include
 )
 
+add_custom_target(piped_erlang_vm ALL
+	COMMAND
+		erlc ${CMAKE_CURRENT_SOURCE_DIR}/erl/piped.erl
+)
+
 if(ERLIS_TESTS)
 	add_subdirectory(tests)
 endif(ERLIS_TESTS)
