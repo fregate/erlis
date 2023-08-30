@@ -1,12 +1,20 @@
 #include <array>
 #include <charconv>
+#include <cstdint>
+#include <fcntl.h>
 #include <iomanip>
 #include <memory>
 #include <sstream>
 #include <stdio.h>
 #include <string>
+#include <sys/stat.h>
+#include <sys/un.h>
+
+#include <ei.h>
 
 #include <erlis/ErlIS.h>
+
+#include "ei_new_format.h"
 
 namespace erlis
 {
@@ -77,6 +85,19 @@ std::vector<std::uint8_t> binary_term(const std::string_view term)
 	}
 
 	return res;
+}
+
+std::vector<std::uint8_t> binary_term2(const std::string_view term)
+{
+	static const int i = ei_init();
+	ei_x_buff buf;
+	int res = ei_x_new(&buf);
+	res = ei_new_format(&buf, term.data());
+
+	std::vector<std::uint8_t> ret(buf.index, 0);
+	std::copy(buf.buff, buf.buff + buf.index, ret.begin());
+	ei_x_free(&buf);
+	return ret;
 }
 
 } // namespace erlis
