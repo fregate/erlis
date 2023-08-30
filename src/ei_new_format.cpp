@@ -435,6 +435,12 @@ static int pmap(const char ** fmt, union arg ** args, ei_x_buff * x, int size, b
 		else
 			res = size;
 		break;
+	case '=':
+		if (after == ',' || after == '{' || after == '=' || after == '>')
+			res = -1;
+		else
+			res = pmap(&p, args, x, size, false);
+		break;
 	case ',':
 		if (after == ',' || after == '{' || after == '=' || after == '>')
 			res = -1;
